@@ -1,0 +1,18 @@
+.deleteButton{
+    margin-top: "10px";
+    margin-left: '10px';
+    border: 'none';
+    border-radius: '5px';
+    padding: '5px';
+    cursor: 'pointer';
+}
+
+.taskContent{
+    user-select: 'none';
+    padding: 16;
+    border-radius: 10%;
+    margin-top: '10px';
+    margin-bottom: '10px';
+    min-height: '400px';
+    color: 'white';
+}
