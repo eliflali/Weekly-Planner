@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import DeleteIcon from '@mui/icons-material/Delete'; 
+import SimpleModal  from './SimpleModal';
 
 const DayColumn = ({ day, tasks, internalDroppableId, onDeleteTask }) => {
   const [selectedTask, setSelectedTask] = useState(null);
 
   const handleTaskClick = (task) => {
     setSelectedTask(task);
+
   };
+
+  // Handles closing the modal
+  const handleClose = () => {
+    setSelectedTask(null);
+  };
+
   return (
+    <>
     <Droppable droppableId={internalDroppableId}>
       {(provided, snapshot) => (
         <div
@@ -78,8 +87,18 @@ const DayColumn = ({ day, tasks, internalDroppableId, onDeleteTask }) => {
           ))}
           {provided.placeholder}
         </div>
+        
       )}
+      
     </Droppable>
+    {selectedTask && (
+        <SimpleModal
+          isOpen={!!selectedTask}
+          onClose={handleClose}
+          task={selectedTask}
+        />
+      )}
+    </>
   );
 };
 

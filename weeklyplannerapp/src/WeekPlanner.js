@@ -1,5 +1,5 @@
 // WeekPlanner.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import DayColumn from './DayColumn'; // Ensure this path matches your project structure
 import { reorder } from './reorder'; // Ensure this path matches your project structure
@@ -7,17 +7,38 @@ import TaskInput from './TaskInput'; // Import the new component
 
 
 // Initial state setup for columns
-const initialColumns = days => {
-    const dayColumns = days.reduce((acc, day) => ({
-      ...acc,
-      [day]: []
-    }), {});
-    return { ...dayColumns, unscheduled: [] }; // Add an unscheduled section for new tasks
+const initialColumns = {
+    Monday: [], Tuesday: [], Wednesday: [], Thursday: [], Friday: [], Saturday: [], Sunday: [], unscheduled: []
   };
+  
   
 const WeekPlanner = () => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-  const [columns, setColumns] = useState(initialColumns(days));
+  const [columns, setColumns] = useState(initialColumns);
+
+  useEffect(() => {
+    fetch('http://localhost:8000/api/tasks/') // Adjust this URL to your Django server's address
+      .then(response => response.json())
+      .then(data => {
+        const newColumns = { ...initialColumns };
+        data.forEach(task => {
+          const day = task.day || 'unscheduled';
+          if (!newColumns[day]) {
+            newColumns[day] = [];
+          }
+          newColumns[day].push({
+            id: task.id,
+            content: task.title, // Assuming you want to display the title as content
+            draggableId: task.id,
+            deadline: task.deadline,
+            emergencyStatus: task.emergency_status,
+            // Add other fields as needed
+          });
+        });
+        setColumns(newColumns);
+      })
+      .catch(error => console.log(error));
+  }, []); // Empty dependency array means this effect runs once on mount
 
   const addTask = (taskName, deadline, emergencyStatus) => {
     const newTask = {
@@ -34,18 +55,29 @@ const WeekPlanner = () => {
   };
 
   const deleteTask = (day, taskId) => {
-    if (day === "Unscheduled")
-    {
-        const filteredTasks = columns.unscheduled.filter(task => task.id !== taskId)
-        const newColumns = { ...columns, unscheduled: filteredTasks };
+    fetch(`http://localhost:8000/api/tasks/${taskId}/`, { // Use the correct URL and taskId
+    method: 'DELETE',
+    headers: {
+        'Content-Type': 'application/json',
+        // Include any necessary headers, such as authentication tokens
+    },
+})
+.then(response => {
+    if (response.ok) {
+        // Remove the task from the local state if the deletion was successful
+        const newColumns = { ...columns };
+        if (day === "Unscheduled") {
+            newColumns.unscheduled = newColumns.unscheduled.filter(task => task.id !== taskId);
+        } else {
+            newColumns[day] = newColumns[day].filter(task => task.id !== taskId);
+        }
         setColumns(newColumns);
+    } else {
+        // Handle errors, such as showing a message to the user
+        console.error('Failed to delete the task.');
     }
-    else
-    {
-        const filteredTasks = columns[day].filter(task => task.id !== taskId);
-        const newColumns = { ...columns, [day]: filteredTasks };
-        setColumns(newColumns);
-    }
+})
+.catch(error => console.error('Error:', error));
   };
 
   const onDragEnd = result => {

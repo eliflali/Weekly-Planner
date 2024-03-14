@@ -3,7 +3,9 @@
 import React from 'react';
 
 const SimpleModal = ({ isOpen, onClose, task }) => {
+    console.log(isOpen)
   if (!isOpen) {
+    
     return null;
   }
 

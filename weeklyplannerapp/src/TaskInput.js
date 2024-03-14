@@ -5,13 +5,43 @@ const TaskInput = ({onAddTask }) => {
   const [taskName, setTaskName] = useState('');
   const [deadline, setDeadline] = useState('');
   const [emergencyStatus, setEmergencyStatus] = useState('Moderate');
+  const [description, setDescription] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onAddTask(taskName, deadline, emergencyStatus);
     setTaskName('');
     setDeadline('');
+    setDescription('');
     setEmergencyStatus('Moderate');
+    const day = "unscheduled";
+    // Prepare the data
+    const taskData = {
+        title: taskName,
+        description,
+        day,
+        deadline,
+        emergency_status: emergencyStatus,
+    };
+    // Send a POST request to the Django backend
+    fetch('http://localhost:8000/api/tasks/', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        // Include authentication tokens here if your API requires
+        },
+        body: JSON.stringify(taskData),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        // Reset form, handle success, etc.
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        // Handle errors, e.g., show an error message
+    });
+
   };
 
   return (
@@ -24,6 +54,16 @@ const TaskInput = ({onAddTask }) => {
         required
         className="inputField"
       />
+      <div className="emergencyStatusContainer">
+      <input
+        type="text"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        placeholder="Task description"
+        required
+        className="inputField"
+      />
+      </div>
       <div className="emergencyStatusContainer">
       <strong>Deadline:</strong>
       <input 
