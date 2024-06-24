@@ -85,7 +85,7 @@ const WeekPlanner = () => {
     if (!destination) {
       return;
     }
-
+  
     if (source.droppableId === destination.droppableId) {
       const newItems = reorder(columns[source.droppableId], source.index, destination.index);
       const newColumns = { ...columns, [source.droppableId]: newItems };
@@ -95,11 +95,35 @@ const WeekPlanner = () => {
       const finish = columns[destination.droppableId];
       const [removed] = start.splice(source.index, 1);
       finish.splice(destination.index, 0, removed);
-
+  
       const newColumns = { ...columns, [source.droppableId]: start, [destination.droppableId]: finish };
       setColumns(newColumns);
+  
+      // After updating local state, send a PATCH request to the backend
+      // Assuming your task IDs are unique and can be used directly
+      const taskId = removed.id; // Use the actual task ID here
+      const newDay = destination.droppableId; // The droppableId is used as the day
+      console.log(newDay);
+      
+      fetch(`http://localhost:8000/api/tasks/${taskId}/`, {
+        method: 'PATCH', // or 'PUT' if your API expects a full update
+        headers: {
+          'Content-Type': 'application/json',
+          // Include any necessary headers, such as authentication tokens
+        },
+        body: JSON.stringify({
+          day: newDay, // Update the day based on the destination droppableId
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Task updated successfully:', data);
+        // Optionally, refresh the tasks from the backend to ensure UI consistency
+      })
+      .catch(error => console.error('Error updating task:', error));
     }
   };
+  
 
   return (
     <>
