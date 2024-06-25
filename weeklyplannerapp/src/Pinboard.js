@@ -94,8 +94,7 @@ const PinboardComponent = () => {
     return (
         <>
         <PinboardHeader></PinboardHeader>
-        <div className="pinboard-container">
-            <div className='input-container'>
+        <div className='input-container'>
             <div className='color-picker-container'>
             <ColorPicker selectedColor={color} onChangeColor={setColor} />
             </div>
@@ -109,8 +108,10 @@ const PinboardComponent = () => {
                 style={{ backgroundColor: color }}
             />
             </div>
+        <div className="pinboard-container">
             
             
+            <div className='pinboard-container-grid'>
             <GridLayout
                 className="grid-layout"
                 layout={notes}
@@ -130,6 +131,7 @@ const PinboardComponent = () => {
                     
                 ))}
             </GridLayout>
+            </div>
         </div>
         </>
     );
