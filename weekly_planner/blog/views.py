@@ -17,5 +17,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 class TaskList(generics.ListAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    
+
 
 # Create your views here.

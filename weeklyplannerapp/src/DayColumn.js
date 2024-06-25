@@ -16,6 +16,16 @@ const DayColumn = ({ day, tasks, internalDroppableId, onDeleteTask }) => {
     setSelectedTask(null);
   };
 
+  const taskColors = {"High": "#c62828", 
+  "Moderate": "#ffa726",
+  "Low": "#26c6da",
+  "Hobby": "#66bb6a"}
+
+  const taskHoverColors = {"High": "#b71c1c", 
+  "Moderate": "#ffb74d",
+  "Low": "#00acc1",
+  "Hobby": "#43a047"}
+
   return (
     <>
     <Droppable droppableId={internalDroppableId}>
@@ -53,7 +63,7 @@ const DayColumn = ({ day, tasks, internalDroppableId, onDeleteTask }) => {
                     userSelect: 'none',
                     padding: '12px 16px',
                     margin: '0 0 8px 0',
-                    backgroundColor: snapshot.isDragging ? '#9575cd' : '#b39ddb', // Gradient of purple for tasks
+                    backgroundColor: snapshot.isDragging ? taskHoverColors[task.emergencyStatus] : taskColors[task.emergencyStatus], // Gradient of purple for tasks
                     color: 'white', // White text for contrast
                     display: 'flex',
                     justifyContent: 'space-between',

@@ -1,14 +1,28 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import WeekPlanner from './WeekPlanner';
+import Pinboard from './Pinboard';
 
 
 function App() {
   return (
+
+
     <DndProvider backend={HTML5Backend}>
-      <WeekPlanner />
+
+      <Router>
+      <Routes>
+        <Route path="/" element={<WeekPlanner />} />
+        <Route path="/pinboard" element={<Pinboard />} />
+      </Routes>
+    </Router>
+
     </DndProvider>
+
+
+    
   );
 }
 

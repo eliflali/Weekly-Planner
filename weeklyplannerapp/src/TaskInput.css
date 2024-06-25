@@ -44,10 +44,11 @@
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
-    background-color: #9c27b0; /* Vibrant purple for the submit button */
-    color: white;
+    background-color: #e1bee7; /* Vibrant purple for the submit button */
+    color: #4a148c;
     cursor: pointer;
     font-weight: bold;
+    font-size: 16px;
     transition: background-color 0.3s;
 }
 

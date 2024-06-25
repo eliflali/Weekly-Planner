@@ -4,6 +4,10 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import DayColumn from './DayColumn'; // Ensure this path matches your project structure
 import { reorder } from './reorder'; // Ensure this path matches your project structure
 import TaskInput from './TaskInput'; // Import the new component
+import { Button } from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
+import Header from './Header';
 
 
 // Initial state setup for columns
@@ -13,6 +17,7 @@ const initialColumns = {
   
   
 const WeekPlanner = () => {
+  
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const [columns, setColumns] = useState(initialColumns);
 
@@ -43,7 +48,8 @@ const WeekPlanner = () => {
   const addTask = (taskName, deadline, emergencyStatus) => {
     const newTask = {
       day: "Unscheduled",
-      id: `task-${Date.now()}`, // Using current timestamp for a unique ID
+      //id: `task-${Date.now()}`, // Using current timestamp for a unique ID
+      id: uuidv4(),
       content: taskName,
       deadline,
       emergencyStatus,
@@ -52,9 +58,28 @@ const WeekPlanner = () => {
     const newUnscheduledTasks = [...columns['unscheduled'], newTask];
     const newColumns = { ...columns, unscheduled: newUnscheduledTasks };
     setColumns(newColumns);
+    // Add the new task to the backend
+    fetch('http://localhost:8000/api/tasks/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Include any necessary headers, such as authentication tokens
+      },
+      body: JSON.stringify(newTask),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Task added successfully:', data);
+      // Optionally, refresh the tasks from the backend to ensure UI consistency
+    })
+    .catch(error => console.error('Error adding task:', error));
+  
+
+    
   };
 
   const deleteTask = (day, taskId) => {
+    console.log("taskID: ", taskId);
     fetch(`http://localhost:8000/api/tasks/${taskId}/`, { // Use the correct URL and taskId
     method: 'DELETE',
     headers: {
@@ -124,16 +149,21 @@ const WeekPlanner = () => {
     }
   };
   
+  
+  
 
   return (
     <>
+     <Header></Header>
       <TaskInput days={days} onAddTask={addTask} />
+      
       <DragDropContext onDragEnd={onDragEnd}>
     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-start', gap: '20px', padding: '20px', backgroundColor: '#f0f2f5', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', }}>
       {days.map(day => (
         <DayColumn key={day} day={day} tasks={columns[day]} internalDroppableId={day} onDeleteTask={deleteTask} />
       ))}
       {/* Render unscheduled tasks */}
+
       <DayColumn key="unscheduled" day="Unscheduled" tasks={columns.unscheduled} internalDroppableId="unscheduled" onDeleteTask={deleteTask} />
     </div>
   </DragDropContext>
