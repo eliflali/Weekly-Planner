@@ -14,7 +14,8 @@
 .selectField,
 .dateTimeField,
 .emergencyStatusSelect {
-    width: 80%;
+    /*width: 80%;*/
+    min-width: 300px;
     max-width: 400px;
     padding: 10px;
     border: none;

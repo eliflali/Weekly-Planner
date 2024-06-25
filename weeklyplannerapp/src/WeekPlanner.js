@@ -72,10 +72,7 @@ const WeekPlanner = () => {
       console.log('Task added successfully:', data);
       // Optionally, refresh the tasks from the backend to ensure UI consistency
     })
-    .catch(error => console.error('Error adding task:', error));
-  
-
-    
+    .catch(error => console.error('Error adding task:', error)); 
   };
 
   const deleteTask = (day, taskId) => {

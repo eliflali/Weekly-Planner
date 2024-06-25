@@ -57,4 +57,14 @@ class ScheduledTasks(models.Model):
         return self.deadline - now()
 
 
+class Note(models.Model):
+    content = models.TextField()
+    color = models.CharField(max_length=10)  # Store colors in HEX
+    x_position = models.IntegerField(default=0)
+    y_position = models.IntegerField(default=0)
+    # You can add more fields like user, timestamp, etc.
+
+    def __str__(self):
+        return self.content[:50]  # Show first 50 characters
+    
 # Create your models here.

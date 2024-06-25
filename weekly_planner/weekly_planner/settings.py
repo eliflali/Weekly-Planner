@@ -73,7 +73,23 @@ TEMPLATES = [
 WSGI_APPLICATION = 'weekly_planner.wsgi.application'
 
 CORS_ALLOW_ALL_ORIGINS = True
+# Define which origins are allowed
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Allow your React application's origin
+]
 
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+
+# If your API uses cookies or authorization headers:
+CORS_ALLOW_CREDENTIALS = True
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 

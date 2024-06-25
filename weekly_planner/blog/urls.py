@@ -3,9 +3,11 @@ from rest_framework.routers import DefaultRouter
 from .views import TaskViewSet
 from .views import TaskList
 from .views import ScheduledTasksList
+from .views import NoteViewSet
 
 router = DefaultRouter()
 router.register(r'tasks', TaskViewSet)
+router.register(r'notes', NoteViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
