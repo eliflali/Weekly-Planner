@@ -1,13 +1,27 @@
+.pinboard-container {
+    height: 100vh;
+    overflow: auto;
+    background: url('./assets/pinboard.jpg') no-repeat center center; /* Adjust the path as necessary */
+    background-size: cover;
+    padding: 20px;
+}
+
+.input-container{
+    display: flex;
+}
+
 .note-input {
     width: 200px;
     height: 100px;
+    margin: 20px;
     padding: 10px;
-    margin: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 8px;
     background-color: #fff;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    resize: none; /* No resizing to maintain paper look */
+    resize: none;
+    overflow: hidden;
+    font-size: 16px;
 }
 
 .note-input:focus {
@@ -16,17 +30,38 @@
     box-shadow: 0 0 10px #9ecaed;
 }
 
-.new-note-animation {
-    animation: pop-in 0.3s ease-out forwards;
+.note-input::placeholder {
+    color: #6a5495;  /* Darker purple placeholder text */
+    font-size: 16px;
 }
 
-@keyframes pop-in {
-    from {
-        transform: scale(0.5);
-        opacity: 0.5;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
+.color-picker {
+    margin: 20px;
+}
+
+.grid-layout {
+    transition: all 0.5s ease;
+}
+
+.note-item {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: transparent;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    overflow: hidden;
+    position: relative;
+}
+
+.delete-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    color: white;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-weight: bold;
+    cursor: pointer;
 }

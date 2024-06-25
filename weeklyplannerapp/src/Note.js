@@ -7,20 +7,18 @@ const Note = ({ note, onDelete }) => {
             backgroundColor: note.color, 
             position: 'relative', 
             width: '100%', 
-            height: '100%'
+            height: '100%',
+            padding:'0px',
+            display:'flex'
         }}>
-            <span>{note.content}</span>
-            <button
-                style={{
-                    position: 'absolute',
-                    right: '10px',
-                    top: '10px',
-                    cursor: 'pointer'
-                }}
-                onClick={() => onDelete(note.i)}  // Passing note ID to onDelete
+            <span style={{
+            padding:'10px',
+            marginTop: '10px'
+        }}>{note.content}</span>
+            <div className='delete-button-container'
             >
-                <DeleteIcon />
-            </button>
+            <DeleteIcon className= 'delete-button' onClick={() => onDelete(note.i)}/>
+            </div>
         </div>
     );
 };

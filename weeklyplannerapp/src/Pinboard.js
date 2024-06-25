@@ -4,12 +4,16 @@ import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import axios from 'axios';
 import Note from './Note';
-import './Pinboard.css'
+import './Pinboard.css';
+import DeleteIcon from '@mui/icons-material/Delete';  // Material-UI delete icon for better UI
+import PinboardHeader from './PinboardHeader';
+import ColorPicker from './ColorPicker';
 
 const PinboardComponent = () => {
     const [notes, setNotes] = useState([]);
     const [newNote, setNewNote] = useState('');
-    const [color, setColor] = useState('#FFFFFF');
+    const [selectedNote, setSelectedNote] = useState(null);
+    const [color, setColor] = useState('#e1bee7');
 
     useEffect(() => {
         fetchNotes();
@@ -29,8 +33,8 @@ const PinboardComponent = () => {
             ...note,
             x: note.x_position,
             y: note.y_position,
-            w: 2,  // Slightly wider default width
-            h: 2,  // Default height
+            w: 7,  // Slightly wider default width
+            h: 3,  // Default height
             i: note.id.toString() 
         })));
     };
@@ -60,7 +64,6 @@ const PinboardComponent = () => {
             y_position: 0
         }).then(() => {
             setNewNote('');
-            setColor('#FFFFFF');
             fetchNotes();
         });
     };
@@ -76,9 +79,27 @@ const PinboardComponent = () => {
         }
     };
     
+    
+
+  const handleNoteClick = (task) => {
+    setSelectedNote(task);
+
+  };
+
+  // Handles closing the modal
+  const handleClose = () => {
+    setSelectedNote(null);
+  };
 
     return (
-        <div style={{ height: '100vh', overflow: 'auto' }}>
+        <>
+        <PinboardHeader></PinboardHeader>
+        <div className="pinboard-container">
+            <div className='input-container'>
+            <div className='color-picker-container'>
+            <ColorPicker selectedColor={color} onChangeColor={setColor} />
+            </div>
+            
             <textarea
                 className="note-input"
                 value={newNote}
@@ -87,30 +108,30 @@ const PinboardComponent = () => {
                 placeholder="Add a new note"
                 style={{ backgroundColor: color }}
             />
-            <input
-                type="color"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
-            />
+            </div>
+            
+            
             <GridLayout
-                className="layout"
+                className="grid-layout"
                 layout={notes}
-                cols={60}  // More columns for finer control
-                rowHeight={10}  // Smaller row height for more vertical precision
+                cols={60}
+                rowHeight={30}
                 width={1200}
-                compactType={null}  // No automatic compacting
-                onLayoutChange={(layout) => handleDragStop(layout)}
-                isResizable={true}  // Allow resizing
-                isDraggable={true}  // Allow dragging
+                compactType={null}
+                onLayoutChange={handleDragStop}
+                isResizable={true}
+                isDraggable={true}
             >
-                
                 {notes.map(note => (
-                    <div key={note.i}>
-                        <Note note={note} onDelete={handleDeleteNote} />
+                    <div key={note.i} className="note-item">
+                        <Note note={note} onDelete={() => handleDeleteNote(note.id)} />
+                       
                     </div>
+                    
                 ))}
             </GridLayout>
         </div>
+        </>
     );
 };
 
