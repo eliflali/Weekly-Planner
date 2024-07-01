@@ -22,6 +22,7 @@ class Task(models.Model):
     date_published = models.DateTimeField(auto_now_add=True)
     deadline = models.DateTimeField()
     emergency_status = models.CharField(max_length=500)
+    completed = models.BooleanField(default=False)  # New field for completed status
     
     def __str__(self):
         return self.title
@@ -29,14 +30,11 @@ class Task(models.Model):
     def end_date(self):
         return self.deadline
 
-    
-
     def remaining_time(self):
         # Adjusted to use timezone aware datetime
         return self.deadline - now()
     
 class ScheduledTasks(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     day = models.CharField(max_length = 15)
     title = models.CharField(max_length=100)
     description = models.TextField()

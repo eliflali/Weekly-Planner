@@ -21,7 +21,8 @@ const WeekPlanner = () => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const [columns, setColumns] = useState(initialColumns);
 
-  useEffect(() => {
+
+useEffect(() => {
     fetch('http://localhost:8000/api/tasks/') // Adjust this URL to your Django server's address
       .then(response => response.json())
       .then(data => {
@@ -37,13 +38,13 @@ const WeekPlanner = () => {
             draggableId: task.id,
             deadline: task.deadline,
             emergencyStatus: task.emergency_status,
-            // Add other fields as needed
+            completed: task.completed,
           });
         });
         setColumns(newColumns);
       })
       .catch(error => console.log(error));
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, []); // Empty dependency array means this effect runs once on mount*/
 
   const addTask = (taskName, deadline, emergencyStatus) => {
     const newTask = {
@@ -54,6 +55,7 @@ const WeekPlanner = () => {
       deadline,
       emergencyStatus,
       draggableId: `unscheduled-task-${Date.now()}`,
+      completed: false,
     };
     const newUnscheduledTasks = [...columns['unscheduled'], newTask];
     const newColumns = { ...columns, unscheduled: newUnscheduledTasks };
@@ -73,6 +75,7 @@ const WeekPlanner = () => {
       // Optionally, refresh the tasks from the backend to ensure UI consistency
     })
     .catch(error => console.error('Error adding task:', error)); 
+
   };
 
   const deleteTask = (day, taskId) => {
@@ -101,6 +104,27 @@ const WeekPlanner = () => {
 })
 .catch(error => console.error('Error:', error));
   };
+  const completeTask = (day, taskId) => {
+    console.log("task completed");
+    fetch(`http://localhost:8000/api/tasks/${taskId}/`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ completed: true }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        const newColumns = { ...columns };
+        if (day === "Unscheduled") {
+          newColumns.unscheduled = newColumns.unscheduled.filter(task => task.id !== taskId);
+        } else {
+            newColumns[day] = newColumns[day].filter(task => task.id !== taskId);
+        }
+        setColumns(newColumns);
+    })
+    .catch(error => console.error('Error completing task:', error));
+};
 
   const onDragEnd = result => {
     const { source, destination } = result;
@@ -156,12 +180,12 @@ const WeekPlanner = () => {
       
       <DragDropContext onDragEnd={onDragEnd}>
     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-start', gap: '20px', padding: '20px', backgroundColor: '#f0f2f5', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', }}>
-      {days.map(day => (
-        <DayColumn key={day} day={day} tasks={columns[day]} internalDroppableId={day} onDeleteTask={deleteTask} />
-      ))}
+    {days.map(day => (
+                        <DayColumn key={day} day={day} tasks={columns[day]} internalDroppableId={day} onDeleteTask={deleteTask} onCompleteTask={completeTask} />
+                    ))}
       {/* Render unscheduled tasks */}
 
-      <DayColumn key="unscheduled" day="Unscheduled" tasks={columns.unscheduled} internalDroppableId="unscheduled" onDeleteTask={deleteTask} />
+      <DayColumn key="unscheduled" day="Unscheduled" tasks={columns.unscheduled} internalDroppableId="unscheduled" onDeleteTask={deleteTask} onCompleteTask={completeTask} />
     </div>
   </DragDropContext>
     </>

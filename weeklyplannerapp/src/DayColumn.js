@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import DeleteIcon from '@mui/icons-material/Delete'; 
 import SimpleModal  from './SimpleModal';
-
-const DayColumn = ({ day, tasks, internalDroppableId, onDeleteTask }) => {
+import { Button } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+const DayColumn = ({ day, tasks, internalDroppableId, onDeleteTask, onCompleteTask }) => {
   const [selectedTask, setSelectedTask] = useState(null);
 
   const handleTaskClick = (task) => {
@@ -25,6 +26,8 @@ const DayColumn = ({ day, tasks, internalDroppableId, onDeleteTask }) => {
   "Moderate": "#ffb74d",
   "Low": "#00acc1",
   "Hobby": "#43a047"}
+
+  const completedTask = "#ccc"
 
   return (
     <>
@@ -52,6 +55,7 @@ const DayColumn = ({ day, tasks, internalDroppableId, onDeleteTask }) => {
             {day}
           </h3>
           {tasks.map((task, index) => (
+            !task.completed &&
             <Draggable key={task.id} draggableId={task.draggableId} index={index}>
               {(provided, snapshot) => (
                 <div
@@ -63,7 +67,7 @@ const DayColumn = ({ day, tasks, internalDroppableId, onDeleteTask }) => {
                     userSelect: 'none',
                     padding: '12px 16px',
                     margin: '0 0 8px 0',
-                    backgroundColor: snapshot.isDragging ? taskHoverColors[task.emergencyStatus] : taskColors[task.emergencyStatus], // Gradient of purple for tasks
+                    backgroundColor: task.completed ? completedTask : snapshot.isDragging ? taskHoverColors[task.emergencyStatus] : taskColors[task.emergencyStatus], // Gradient of purple for tasks
                     color: 'white', // White text for contrast
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -74,10 +78,15 @@ const DayColumn = ({ day, tasks, internalDroppableId, onDeleteTask }) => {
 
                     ...provided.draggableProps.style,
                   }}
-                  onClick={() => handleTaskClick(task)}
+                  
                 >
+                  <div
+                  onClick={() => handleTaskClick(task)}>
+                    
                   {task.content}
-
+                  </div>
+                  
+                  <CheckIcon variant="outlined" color="white" size="small" onClick={() => onCompleteTask(day, task.id)}>Complete</CheckIcon>
                   <DeleteIcon
                     onClick={(event) => {
                         event.stopPropagation(); // Prevent click from propagating to the parent div

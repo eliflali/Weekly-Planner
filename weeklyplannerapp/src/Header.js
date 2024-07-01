@@ -8,6 +8,14 @@ const Header = () => {
         event.preventDefault(); // Prevent form submission
         navigate('/pinboard'); // Navigate to register page
     };
+    const handleTaskViewClick = (event) => {
+      event.preventDefault(); // Prevent form submission
+      navigate('/task-viewer'); // Navigate to register page
+  };
+  const handleEmergencyStatusViewerClick = (event) => {
+    event.preventDefault(); // Prevent form submission
+    navigate('/manage-emergency-status'); // Navigate to register page
+};
     return(
 
         <div className='header-container'>
@@ -18,6 +26,20 @@ const Header = () => {
     
   >
     Pinboard
+  </button>
+  <button 
+    onClick={handleTaskViewClick} 
+    className='pinboard-button'
+    
+  >
+    View Tasks
+  </button>
+  <button 
+    onClick={handleEmergencyStatusViewerClick} 
+    className='pinboard-button'
+    
+  >
+    Manage Emergency Status
   </button>
   </div>
   <div className='logo-container'>

@@ -11,7 +11,7 @@ class ScheduledTasksSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ['id' , 'title', 'description', 'day',  'deadline', 'emergency_status']
+        fields = ['id' , 'title', 'description', 'day',  'deadline', 'emergency_status', 'completed']
         
 class NoteSerializer(serializers.ModelSerializer):
     class Meta:
