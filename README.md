@@ -28,6 +28,7 @@ Scheduling and deleting a task:
 ![WhatsApp GIF 2024-07-08 at 14 55 56](https://github.com/eliflali/Weekly-Planner/assets/63200204/3dd36e99-d973-4f02-9df8-873420853cc7)
 
 Resulting schedule:
+
 ![WhatsApp GIF 2024-07-08 at 14 56 22](https://github.com/eliflali/Weekly-Planner/assets/63200204/abca11bc-3d79-404f-9e9f-808394dad361)
 
 
@@ -46,6 +47,9 @@ Those two components are used together:
 #### 1. WeekPlanner
 
 The WeekPlanner component is the main container for the weekly planner. It manages the state of tasks, handles task addition, deletion, and completion, and supports drag-and-drop functionality.
+
+---
+
 
 #### 2. DayColumn
 
@@ -74,6 +78,8 @@ View and Manage Tasks: Open the application to see tasks organized by day. You c
 Drag-and-Drop: Drag tasks between different days to organize your week. The tasks will automatically update their day in the backend.
 Complete and Delete Tasks: Use the check and delete icons to mark tasks as complete or remove them from the list.
 
+---
+
 #### 3. Pinboard Component
 
 ##### Functionality:
@@ -90,6 +96,8 @@ Drag notes to reposition them on the board. The new positions are saved to the b
 * Delete Notes:
 Click the delete icon on a note to remove it from the pinboard.
 
+---
+
 #### 4. Emergency Status Manager
 
 ##### Functionality:
@@ -103,6 +111,8 @@ Click the delete icon on a note to remove it from the pinboard.
 Tasks are displayed under columns corresponding to their emergency status.
 * Drag and Drop:
 Drag tasks between columns to update their emergency status. The changes are saved to the backend.
+
+---
 
 #### 5. Task Viewer
 
